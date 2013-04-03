@@ -1,13 +1,22 @@
-fs = require "fs"
+fs             = require "fs"
+{OptionParser} = require "optparse"
+{spawn}        = require "child_process"
 
 windowGiven = true
+out = null
+
+class WriterVar
+  constructor: ->
+    @data = ""
+  write: (data) ->
+    @data += data
 
 readLayout = ->
   data = fs.readFileSync "tmux.json"
   JSON.parse data
 
 emitCommand = (cmd) ->
-  process.stdout.write "#{cmd} \\; "
+  out.write "#{cmd}  \\; "
 
 emitPrefix = ->
   emitCommand "tmux new-session"
@@ -62,9 +71,43 @@ handleWindow = (win) ->
       emitMoveRight()
       handleWindow win.right
 
-layout = readLayout()
-emitPrefix()
-for win in layout
-  emitWindow win.name
-  handleWindow win
-console.log()
+compile = (o) ->
+  out = o
+  layout = readLayout()
+  emitPrefix()
+  for win in layout
+    emitWindow win.name
+    handleWindow win
+  out.write "\n"
+  o
+
+# Argument parsing
+
+switches = [
+  ["-h", "--help", "You are looking at it"],
+  ["-c", "--compile", "Print the compiled tmux command to STDOUT"],
+]
+
+options =
+  help    : false,
+  compile : false
+
+parser = new OptionParser switches
+parser.on "help", ->
+  options.help = true
+parser.on "compile", ->
+  options.compile = true
+
+parser.banner = "Usage: tmux-layout [-h|-c]"
+parser.parse(process.argv)
+
+if options.help
+  console.log parser.banner
+  return
+
+if options.compile
+  compile process.stdout
+  return
+
+v = compile (new WriterVar)
+spawn "sh", ["-c", v.data], stdio: "inherit"
