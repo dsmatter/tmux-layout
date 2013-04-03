@@ -1,0 +1,7 @@
+{
+  "name"         : "tmux-layout",
+  "version"      : "0.0.1",
+  "dependencies" : {
+    "optparse": "*"
+  }
+}
