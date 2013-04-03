@@ -25,27 +25,30 @@ class TmuxCommand
     spawn "sh", ["-c", @out.data], stdio: "inherit"
 
   emitCommand: (cmd) ->
-    @out.write "#{cmd} \\; "
+    @out.write " \\; #{cmd}"
 
   emitPrefix: ->
-    @emitCommand "tmux new-session"
+    @out.write "tmux new-session"
 
   emitWindow: (name) ->
     if @windowGiven
       @windowGiven = false
       return
-    cmd = "new-window"
+    cmd = "new-window -c \"#{process.cwd()}\""
     cmd += " -n \"#{name}\"" if name?
     @emitCommand cmd
 
   emitKeys: (keys) ->
     @emitCommand "send-keys \"#{keys}\" \"Enter\""
 
+  emitSplit: (direction) ->
+    @emitCommand "split-window -c \"#{process.cwd()}\" -#{direction}"
+
   emitSplitVertical: ->
-    @emitCommand "split-window -v"
+    @emitSplit "v"
 
   emitSplitHorizontal: ->
-    @emitCommand "split-window -h"
+    @emitSplit "h"
 
   emitMove: (direction) ->
     @emitCommand "select-pane -#{direction}"
