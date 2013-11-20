@@ -4,12 +4,12 @@ A tiny utitility to generate [tmux](http://tmux.sourceforge.net) commands from a
 ## Installation
 Make sure you have installed node.js including NPM
 
-     make
-     sudo npm install -g .
+     sudo npm install -g tmux-layout
 
 ## Usage
 Start a new tmux session with a given layout
 
+    tmux-layout # uses tmux.json file in current directory
     tmux-layout /path/to/layout.json
 
 Print out the "compiled" tmux command
