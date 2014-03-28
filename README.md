@@ -17,19 +17,21 @@ Print out the "compiled" tmux command
     tmux-layout -c /path/to/layout.json
 
 ## Layout Files
-The layout files are kept very simple, yet. The following example file should suffice for documentation purporses :)
+The layout files are kept very simple, yet. The following example file should suffice for documentation purporses:
 
-    [
-      {
-        "top":
-          {
-            "left" : "ls -la"
-          },
-        "bottom" : "uname -a"
-      },
-      {
-        "left"  : "w",
-        "right" : ""
-      },
-      "ls -a"
-    ]
+    {
+      "title": "tmux-layout (Purescript)",
+      "windows": [
+        {
+          "title": "Main",
+          "layout": {
+            "left": {
+              "top": "psci",
+              "bottom": "git status"
+            },
+            "right": "ls -al"
+          }
+        }
+      ]
+    }
+    

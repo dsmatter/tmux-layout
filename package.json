@@ -1,14 +1,12 @@
 {
   "name"         : "tmux-layout",
   "description"  : "Manage tmux layouts in JSON files",
-  "version"      : "0.0.2",
+  "version"      : "1.0.0",
   "author"       : "Daniel Strittmatter",
   "repository"   : "https://github.com/dsmatter/tmux-layout",
   "license"      : "MIT",
-  "files"        : ["tmux-layout"],
-  "bin"          : "tmux-layout",
+  "bin"          : "tmux-layout.js",
   "dependencies" : {
-    "optparse": "*",
-    "coffee-script": "*"
+    "optparse": "*"
   }
 }
