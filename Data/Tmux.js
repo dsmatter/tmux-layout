@@ -129,16 +129,18 @@
             };
         };
         var layoutCommand_render = function (_1) {
-            if (_1.ctor === "Data.Tmux.Full") {
-                return [ "send-keys" + quote(_1.values[0]) + "\"Enter\"" ];
+            return function (_2) {
+                if (_2.ctor === "Data.Tmux.Full") {
+                    return [ "send-keys" + quote(_2.values[0]) + "\"Enter\"" ];
+                };
+                if (_2.ctor === "Data.Tmux.HSplit") {
+                    return $plus$plus$plus($plus$plus$plus($plus$plus$plus([ "split-window -h -c" + quote(_1), "select-pane -L" ])(render(layoutCommand({}))(_1)(_2.values[0])))([ "select-pane -R" ]))(render(layoutCommand({}))(_1)(_2.values[1]));
+                };
+                if (_2.ctor === "Data.Tmux.VSplit") {
+                    return $plus$plus$plus($plus$plus$plus($plus$plus$plus([ "split-window -v -c" + quote(_1), "select-pane -U" ])(render(layoutCommand({}))(_1)(_2.values[0])))([ "select-pane -D" ]))(render(layoutCommand({}))(_1)(_2.values[1]));
+                };
+                throw "Failed pattern match";
             };
-            if (_1.ctor === "Data.Tmux.HSplit") {
-                return $plus$plus$plus($plus$plus$plus($plus$plus$plus([ "split-window -h", "select-pane -L" ])(render(layoutCommand({}))(_1.values[0])))([ "select-pane -R" ]))(render(layoutCommand({}))(_1.values[1]));
-            };
-            if (_1.ctor === "Data.Tmux.VSplit") {
-                return $plus$plus$plus($plus$plus$plus($plus$plus$plus([ "split-window -v", "select-pane -U" ])(render(layoutCommand({}))(_1.values[0])))([ "select-pane -D" ]))(render(layoutCommand({}))(_1.values[1]));
-            };
-            throw "Failed pattern match";
         };
         var layoutCommand = function (_1) {
             return {
@@ -146,8 +148,10 @@
             };
         };
         var windowCommand_render = function (_1) {
-            return $plus$plus$plus([ "new-window -n" + quote((_1.values[0]).title) ])(render(layoutCommand({}))((_1.values[0]).layout));
-            throw "Failed pattern match";
+            return function (_2) {
+                return $plus$plus$plus([ "new-window -n" + quote((_2.values[0]).title) + "-c" + quote(_1) ])(render(layoutCommand({}))(_1)((_2.values[0]).layout));
+                throw "Failed pattern match";
+            };
         };
         var windowCommand = function (_1) {
             return {
@@ -155,16 +159,20 @@
             };
         };
         var configCommand_render = function (_1) {
-            return $plus$plus$plus($plus$plus$plus([ "new-session -s" + quote((_1.values[0]).title) ])(_ps.Data_Array.concatMap((_1.values[0]).windows)(render(windowCommand({})))))([ "select-window -t 0", "kill-window", "select-window -t 1" ]);
-            throw "Failed pattern match";
+            return function (_2) {
+                return $plus$plus$plus($plus$plus$plus([ "new-session -s" + quote((_2.values[0]).title) ])(_ps.Data_Array.concatMap((_2.values[0]).windows)(render(windowCommand({}))(_1))))([ "select-window -t 0", "kill-window", "select-window -t 1" ]);
+                throw "Failed pattern match";
+            };
         };
         var configCommand = function (_1) {
             return {
                 render: configCommand_render
             };
         };
-        var toCommand = function (config) {
-            return "tmux " + chainCommands(render(configCommand({}))(config));
+        var toCommand = function (cwd) {
+            return function (config) {
+                return "tmux " + chainCommands(render(configCommand({}))(cwd)(config));
+            };
         };
         module.Full = Full;
         module.HSplit = HSplit;

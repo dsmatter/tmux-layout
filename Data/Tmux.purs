@@ -22,33 +22,33 @@ data TmuxLayout = Full String
                 | VSplit TmuxLayout TmuxLayout
 
 class TmuxCommand a where
-  render :: a -> [String]
+  render :: String -> a -> [String]
 
 instance configCommand :: TmuxCommand TmuxConfig where
-  render (TmuxConfig o) =
+  render cwd (TmuxConfig o) =
     ["new-session -s" ++ quote o.title] +++
-    concatMap o.windows render +++
+    concatMap o.windows (render cwd) +++
     ["select-window -t 0", "kill-window", "select-window -t 1"]
 
 instance windowCommand :: TmuxCommand WindowConfig where
-  render (WindowConfig o) =
-    ["new-window -n" ++ quote o.title] +++ render o.layout
+  render cwd (WindowConfig o) =
+    ["new-window -n" ++ quote o.title ++ "-c" ++ quote cwd] +++ render cwd o.layout
 
 instance layoutCommand :: TmuxCommand TmuxLayout where
-  render (Full command) = ["send-keys" ++ quote command ++ "\"Enter\""]
-  render (HSplit left right) =
-    ["split-window -h", "select-pane -L"] +++
-    render left +++
+  render _ (Full command) = ["send-keys" ++ quote command ++ "\"Enter\""]
+  render cwd (HSplit left right) =
+    ["split-window -h -c" ++ quote cwd, "select-pane -L"] +++
+    render cwd left +++
     ["select-pane -R"] +++
-    render right
-  render (VSplit top bottom) =
-    ["split-window -v", "select-pane -U"] +++
-    render top +++
+    render cwd right
+  render cwd (VSplit top bottom) =
+    ["split-window -v -c" ++ quote cwd, "select-pane -U"] +++
+    render cwd top +++
     ["select-pane -D"] +++
-    render bottom
+    render cwd bottom
 
-toCommand :: TmuxConfig -> String
-toCommand config = "tmux " ++ chainCommands (render config)
+toCommand :: String -> TmuxConfig -> String
+toCommand cwd config = "tmux " ++ chainCommands (render cwd config)
 
 -- JSON parsing
 

@@ -30,7 +30,7 @@ try {
   var path = lastArg.match(/\.json$/) ? lastArg : "tmux.json";
   var json = JSON.parse(fs.readFileSync(path));
   var config = tmux.parseConfig(json);
-  var command = tmux.toCommand(config);
+  var command = tmux.toCommand(process.cwd())(config);
 
   if (options.compile) {
     return console.log(command);
