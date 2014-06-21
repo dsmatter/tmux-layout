@@ -8,21 +8,46 @@ var OptionParser = require("optparse").OptionParser
 var switches = [
   ["-h", "--help", "You are looking at it"],
   ["-c", "--compile", "Print the compiled tmux command to STDOUT"],
+  ["-i", "--init", "Create an example tmux.json file in the current directory"],
 ];
 
 var options = {
   help    : false,
-  compile : false
+  compile : false,
+  init    : false
 };
 
 var parser = new OptionParser(switches);
 parser.on("help", function() { options.help = true; });
 parser.on("compile", function() { options.compile = true; });
+parser.on("init", function() { options.init = true; });
 parser.banner = "Usage: tmux-layout [-h|-c] [config]"
 parser.parse(process.argv);
 
 if (options.help) {
   return console.log(parser.banner);
+}
+
+if (options.init) {
+  if (fs.existsSync("tmux.json")) {
+    return console.log("tmux.json already exists - refusing to overwrite");
+  }
+  var example = {
+    "title": "tmux-layout (Purescript)",
+    "windows": [
+      {
+        "title": "Main",
+        "layout": {
+          "left": {
+            "top": "psci",
+            "bottom": "git status"
+          },
+          "right": "ls -al"
+        }
+      }
+    ]
+  }
+  return fs.writeFileSync("tmux.json", JSON.stringify(example, null, 2));
 }
 
 try {
