@@ -78,7 +78,7 @@
         function render(dict) {
             return dict.render;
         };
-        function parseLayout(json) {  if (!json) { return _ps.Data_Tmux.Full(''); }  if (typeof json === 'string') { return _ps.Data_Tmux.Full(json); }  if (json.top || json.bottom) {    return _ps.Data_Tmux.VSplit(parseLayout(json.top))(parseLayout(json.bottom));  }  return _ps.Data_Tmux.HSplit(parseLayout(json.left))(parseLayout(json.right));};
+        function parseLayout(json) {  if (!json) { return _ps.Data_Tmux.Full(''); }  if (typeof json === 'string') { return _ps.Data_Tmux.Full(json); }  if (typeof json.top !== 'undefined' || typeof json.bottom !== 'undefined') {    return _ps.Data_Tmux.VSplit(parseLayout(json.top))(parseLayout(json.bottom));  }  return _ps.Data_Tmux.HSplit(parseLayout(json.left))(parseLayout(json.right));};
         var quote = function (s) {
             return " \"" + s + "\" ";
         };
