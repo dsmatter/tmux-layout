@@ -21,11 +21,11 @@ var parser = new OptionParser(switches);
 parser.on("help", function() { options.help = true; });
 parser.on("compile", function() { options.compile = true; });
 parser.on("init", function() { options.init = true; });
-parser.banner = "Usage: tmux-layout [-h|-c] [config]"
+parser.banner = "Usage: [Options] layout-file"
 parser.parse(process.argv);
 
 if (options.help) {
-  return console.log(parser.banner);
+  return console.log(parser.toString());
 }
 
 if (options.init) {
@@ -39,7 +39,7 @@ if (options.init) {
         "title": "Main",
         "layout": {
           "left": {
-            "top": "psci",
+            "top": "echo hi",
             "bottom": "git status"
           },
           "right": "ls -al"
