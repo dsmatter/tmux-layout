@@ -1,7 +1,7 @@
 {
   "name"         : "tmux-layout",
   "description"  : "Manage tmux layouts in JSON files",
-  "version"      : "1.1.1",
+  "version"      : "1.1.2",
   "author"       : "Daniel Strittmatter",
   "repository"   : "https://github.com/dsmatter/tmux-layout",
   "license"      : "MIT",
