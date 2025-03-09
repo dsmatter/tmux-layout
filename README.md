@@ -1,3 +1,6 @@
+# ARCHIVED
+Check out the [tmux-layout-rs](https://github.com/dsmatter/tmux-layout-rs) repository for the successor to this tool, which includes additional features.
+
 # tmux-layout
 A tiny utitility to generate [tmux](http://tmux.sourceforge.net) commands from a layout description in JSON format.
 
